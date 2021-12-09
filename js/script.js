@@ -31,25 +31,74 @@ const team = [
   },
 ];
 
-let team_container = document.querySelector(".team-container");
-
-for(let i = 1; i < team.length; i++)
+function insertCardIntoContainer(array, container)
 {
-  const team_card = `
-    <div class="team-card">
-      <div class="card-image">
-        <img
-          src="img/${team[i].image}"
-          alt="Wayne Barnett"
-        />
+  container.innerHTML = '';
+  for(let i = 0; i < team.length; i++)
+  {
+    const team_card = `
+      <div class="team-card">
+        <div class="card-image">
+          <img
+            src="img/${array[i].image}"
+            alt="Wayne Barnett"
+          />
+        </div>
+        <div class="card-text">
+          <h3>${array[i].name}</h3>
+          <p>${array[i].role}</p>
+        </div>
       </div>
-      <div class="card-text">
-        <h3>${team[i].name}</h3>
-        <p>${team[i].role}</p>
-      </div>
-    </div>
-  `;
+    `;
 
-  team_container.innerHTML += team_card;
+    container.innerHTML += team_card;
+  }
 }
 
+let team_container = document.querySelector(".team-container");
+insertCardIntoContainer(team, team_container);
+
+const button = document.getElementById("addMemberButton");
+const nome = document.getElementById("name");
+const role = document.getElementById("role");
+const image = document.getElementById("image");
+
+
+button.addEventListener("click", 
+  function()
+  {
+    let check = true;
+    if(nome.value == '')
+    {
+      nome.placeholder = "nome non valido";
+      check = false;
+    }
+
+    if(role.value == '')
+    {
+      role.placeholder = "ruolo non valido";
+      check = false;
+    }
+
+    if(!image.value.includes(".jpg"))
+    {
+      image.placeholder = "immagine non valida";
+      check = false;
+    }
+
+    if(check == true)
+    {
+      nome.placeholder = "";
+      role.placeholder = "";
+      image.placeholder = "";
+      const newTeamObj = 
+      {
+        name: nome.value,
+        role: role.value,
+        image: image.value,
+      }
+      team.push(newTeamObj);
+      insertCardIntoContainer(team, team_container);
+    }
+  }
+);
